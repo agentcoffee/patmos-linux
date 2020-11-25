@@ -425,16 +425,20 @@ KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
 
 # Make variables (CC, etc...)
 CPP		= $(CC) -E
+#LD		= patmos-ld
+#OBJCOPY		= patmos-objcopy
+#READELF		= patmos-readelf
+#STRIP		= patmos-strip
 ifneq ($(LLVM),)
-CC		= clang
-LD		= ld.lld
-AR		= llvm-ar
-NM		= llvm-nm
-OBJCOPY		= llvm-objcopy
-OBJDUMP		= llvm-objdump
-READELF		= llvm-readelf
-OBJSIZE		= llvm-size
-STRIP		= llvm-strip
+CC		= $(CROSS_COMPILE)clang
+LD		= $(CROSS_COMPILE)ld.lld
+AR		= $(CROSS_COMPILE)llvm-ar
+NM		= $(CROSS_COMPILE)llvm-nm
+OBJCOPY		= $(CROSS_COMPILE)llvm-objcopy
+OBJDUMP		= $(CROSS_COMPILE)llvm-objdump
+READELF		= $(CROSS_COMPILE)llvm-readelf
+OBJSIZE		= $(CROSS_COMPILE)llvm-size
+STRIP		= $(CROSS_COMPILE)llvm-strip
 else
 CC		= $(CROSS_COMPILE)gcc
 LD		= $(CROSS_COMPILE)ld
