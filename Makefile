@@ -713,6 +713,7 @@ quiet_cmd_syncconfig = SYNC    $@
       cmd_syncconfig = $(MAKE) -f $(srctree)/Makefile syncconfig
 
 %/config/auto.conf %/config/auto.conf.cmd %/generated/autoconf.h: $(KCONFIG_CONFIG)
+	echo $@ $<
 	+$(call cmd,syncconfig)
 else # !may-sync-config
 # External modules and some install targets need include/generated/autoconf.h
@@ -935,13 +936,13 @@ KBUILD_CFLAGS += $(call cc-disable-warning, maybe-uninitialized)
 KBUILD_CFLAGS	+= -fno-strict-overflow
 
 # Make sure -fstack-check isn't enabled (like gentoo apparently did)
-KBUILD_CFLAGS  += -fno-stack-check
+KBUILD_CFLAGS  += $(call cc-option,-fno-stack-check)
 
 # conserve stack if available
 KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
 
 # Prohibit date/time macros, which would make the build non-deterministic
-KBUILD_CFLAGS   += -Werror=date-time
+KBUILD_CFLAGS   += $(call cc-option,-Werror=date-time,-Wno-builtin-macro-redefined -D__DATE__= -D__TIME__= -D__TIMESTAMP__=)
 
 # enforce correct pointer usage
 KBUILD_CFLAGS   += $(call cc-option,-Werror=incompatible-pointer-types)

@@ -1,0 +1,22 @@
+// SPDX-License-Identifier: GPL-2.0
+
+/ {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		cpu@0 {
+			device_type = "cpu";
+			model = "patmos";
+            compatible = "t-crest,patmos";
+			reg = <0>;
+		};
+	};
+
+    serial@f0080000 {
+        compatible = "ttyPATMOS";
+    };
+};

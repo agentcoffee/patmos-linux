@@ -1,0 +1,1 @@
+make ARCH=patmos LLVM=1 V=1 KCONFIG_ALLCONFIG=mini.config allnoconfig

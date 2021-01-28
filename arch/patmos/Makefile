@@ -6,18 +6,21 @@
 # for more details.
 #
 
-#KBUILD_DEFCONFIG := dsk6455_defconfig
+KBUILD_DEFCONFIG := patmos_defconfig
 
 #cflags-y += -mno-dsbt -msdata=none -D__linux__
+cflags-y += -fno-builtin
 
-#KBUILD_CFLAGS_MODULE   += -mlong-calls -mno-dsbt -msdata=none
 
 CROSS_COMPILE   = patmos-
 
+#KBUILD_CFLAGS_MODULE   += -mlong-calls -mno-dsbt -msdata=none
+KBUILD_CFLAGS_MODULE   +=
+
 CHECKFLAGS      +=
 
-KBUILD_CFLAGS   += $(cflags-y)
-KBUILD_AFLAGS   += $(cflags-y)
+KBUILD_CFLAGS   += $(filter-out "-fno-stack-check", $(cflags-y))
+KBUILD_AFLAGS   += $(filter-out "-fno-stack-check", $(cflags-y))
 
 head-y          := arch/patmos/kernel/head.o
 core-y          += arch/patmos/kernel/ arch/patmos/platforms/
@@ -29,18 +32,18 @@ all: vmlinux.bin
 boot := arch/$(ARCH)/boot
 
 # Are we making a dtbImage.<boardname> target? If so, crack out the boardname
-DTB:=$(subst dtbImage.,,$(filter dtbImage.%, $(MAKECMDGOALS)))
-export DTB
+#DTB:=$(subst dtbImage.,,$(filter dtbImage.%, $(MAKECMDGOALS)))
+#export DTB
 
-core-y	+= $(boot)/dts/
+#core-y	+= $(boot)/dts/
 
 # With make 3.82 we cannot mix normal and wildcard targets
 
 vmlinux.bin: vmlinux
 	$(Q)$(MAKE) $(build)=$(boot) $(patsubst %,$(boot)/%,$@)
 
-dtbImage.%: vmlinux
-	$(Q)$(MAKE) $(build)=$(boot) $(patsubst %,$(boot)/%,$@)
+#dtbImage.%: vmlinux
+#	$(Q)$(MAKE) $(build)=$(boot) $(patsubst %,$(boot)/%,$@)
 
 archclean:
 	$(Q)$(MAKE) $(clean)=$(boot)
